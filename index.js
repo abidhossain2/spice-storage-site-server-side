@@ -22,6 +22,12 @@ async function run() {
             const result = await cursor.toArray()
             res.send(result);
         })
+        app.post('/products', async(req, res) => {
+            const query = req.body;
+            const result = await ProductCollection.insertOne(query)
+            // const result = await cursor.toArray()
+            res.send(result);
+        })
 
         app.get('/inventory/:id', async (req, res) => {
             const id = req.params.id;
@@ -37,12 +43,13 @@ async function run() {
            const amountOption =  {upsert: true};
            const updateAmount = {
                $set: {
-                   quantity: amount.quantity - 1 
-               }
+                   quantity: amount.quantity - 1
+                }
             }
             const result = await ProductCollection.updateOne(query, updateAmount, amountOption);
             res.send(result);
        })
+
 
     }
     finally {
