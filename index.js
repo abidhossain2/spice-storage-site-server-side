@@ -86,7 +86,22 @@ async function run() {
            const amountOption =  {upsert: true};
            const updateAmount = {
                $set: {
-                   quantity: amount.quantity - 1
+                   quantity: amount.quantity - 1,
+                   
+                }
+            };
+            const result = await ProductCollection.updateOne(query, updateAmount, amountOption);
+            res.send(result);
+       })
+       app.patch('/inventory/:id', async (req, res) => {
+           const id = req.params.id;
+           const amount =  req.body;
+           const query = {_id: ObjectId(id)};
+           const amountOption =  {upsert: true};
+           const updateAmount = {
+               $set: {
+                   quantity: amount.newAmount
+                   
                 }
             }
             const result = await ProductCollection.updateOne(query, updateAmount, amountOption);
