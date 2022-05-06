@@ -16,97 +16,95 @@ async function run() {
         await client.connect();
         const ProductCollection = client.db("spice").collection("products");
         const MyItems = client.db("spice").collection("myitems")
-         console.log('db connected');
-        app.get('/products', async(req, res) => {
+        console.log('db connected');
+        app.get('/products', async (req, res) => {
             const query = {};
             const cursor = ProductCollection.find(query)
             const result = await cursor.toArray()
             res.send(result);
         })
-        app.get('/myitems', async(req, res) => {
+        app.get('/myitems', async (req, res) => {
             const loginUser = req.query.email;
-            const query = {email: loginUser};
+            const query = { email: loginUser };
             const cursor = MyItems.find(query)
             const result = await cursor.toArray()
             res.send(result);
+    
         })
-        app.post('/myitems', async(req, res) => {
-            const query =req.body;
+        app.post('/myitems', async (req, res) => {
+            const query = req.body;
             const result = MyItems.insertOne(query)
             // const result = await cursor.toArray()
             res.send(result);
         })
-        app.post('/products', async(req, res) => {
+        
+
+        app.post('/products', async (req, res) => {
             const query = req.body;
             const result = await ProductCollection.insertOne(query)
             // const result = await cursor.toArray()
             res.send(result);
         })
 
-        app.delete('/inventory/:id', async(req, res) => {
+        app.delete('/inventory/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)}
+            const query = { _id: ObjectId(id) }
             const result = await ProductCollection.deleteOne(query)
             res.send(result)
         })
-       
-        app.delete('/myitems/:id', async(req, res) => {
+
+        app.delete('/myitems/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)}
+            const query = { _id: ObjectId(id) }
             const result = await MyItems.deleteOne(query)
             res.send(result)
         })
-        
-       
+
+
 
         app.get('/inventory/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)}
+            const query = { _id: ObjectId(id) }
             const result = await ProductCollection.findOne(query)
             res.send(result)
         })
-        // app.get('/inventory/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = {_id: ObjectId(id)}
-        //     const result = await MyItems.findOne(query)
-        //     res.send(result)
-        // })
-        
+
+
         app.get('/myitems/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)}
+            const query = { _id: ObjectId(id) }
             const result = await MyItems.findOne(query)
             res.send(result)
         })
 
-       app.put('/inventory/:id', async (req, res) => {
-           const id = req.params.id;
-           const amount =  req.body;
-           const query = {_id: ObjectId(id)};
-           const amountOption =  {upsert: true};
-           const updateAmount = {
-               $set: {
-                   quantity: amount.quantity - 1,
-                   
+        app.put('/inventory/:id', async (req, res) => {
+            const id = req.params.id;
+            const amount = req.body;
+            const query = { _id: ObjectId(id) };
+            const amountOption = { upsert: true };
+            const updateAmount = {
+                $set: {
+                    quantity: amount.quantity - 1,
+
                 }
             };
             const result = await ProductCollection.updateOne(query, updateAmount, amountOption);
             res.send(result);
-       })
-       app.patch('/inventory/:id', async (req, res) => {
-           const id = req.params.id;
-           const amount =  req.body;
-           const query = {_id: ObjectId(id)};
-           const amountOption =  {upsert: true};
-           const updateAmount = {
-               $set: {
-                   quantity: amount.newAmount
-                   
+        })
+        app.patch('/inventory/:id', async (req, res) => {
+            const id = req.params.id;
+            const amount = req.body;
+            const query = { _id: ObjectId(id) };
+            const amountOption = { upsert: true };
+            const updateAmount = {
+                $set: {
+                    quantity: amount.newAmount
+
                 }
             }
             const result = await ProductCollection.updateOne(query, updateAmount, amountOption);
             res.send(result);
-       })
+        })
 
 
     }
