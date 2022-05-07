@@ -34,7 +34,6 @@ async function run() {
         app.post('/myitems', async (req, res) => {
             const query = req.body;
             const result = MyItems.insertOne(query)
-            // const result = await cursor.toArray()
             res.send(result);
         })
         
@@ -42,7 +41,6 @@ async function run() {
         app.post('/products', async (req, res) => {
             const query = req.body;
             const result = await ProductCollection.insertOne(query)
-            // const result = await cursor.toArray()
             res.send(result);
         })
 
@@ -116,7 +114,7 @@ async function run() {
 run().catch(console.dir)
 
 app.get('/', (req, res) => {
-    res.send('Hello')
+    res.send('Server is running')
 })
 
 app.listen(port, () => {
