@@ -33,7 +33,7 @@ async function run() {
         })
         app.post('/myitems', async (req, res) => {
             const query = req.body;
-            const result = MyItems.insertOne(query)
+            const result = await MyItems.insertOne(query)
             res.send(result);
         })
         
